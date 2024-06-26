@@ -139,18 +139,24 @@ class InvoiceController extends Controller
             throw $e;
         }
     }
-
     public function midtransNotification(Request $request)
     {
         Log::info('Midtrans Notification Payload: ', $request->all());
-        $notif = new \Midtrans\Notification();
+
+        $transaction = $request->input('transaction_status');
+        $orderId = $request->input('order_id');
+        $fraud = $request->input('fraud_status');
 
         try {
-            $transaction = $notif->transaction_status;
-            $orderId = $notif->order_id;
-            $fraud = $notif->fraud_status;
-
+            Log::info('Processing order ID: ' . $orderId);
             $invoice = Invoice::where('order_id', $orderId)->first();
+
+            if (!$invoice) {
+                Log::warning('Invoice not found for order ID: ' . $orderId);
+                return response()->json(['message' => 'Invoice not found'], 404);
+            }
+
+            Log::info('Transaction status: ' . $transaction . ', Fraud status: ' . $fraud);
 
             if ($transaction == 'capture') {
                 if ($fraud == 'challenge') {
@@ -168,9 +174,42 @@ class InvoiceController extends Controller
 
             return response()->json(['message' => 'Payment updated successfully']);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Payment update failed', 'error' => $e->getMessage()]);
+            Log::error('Payment update failed', ['exception' => $e->getMessage()]);
+            return response()->json(['message' => 'Payment update failed', 'error' => $e->getMessage()], 500);
         }
     }
+
+    // public function midtransNotification(Request $request)
+    // {
+    //     Log::info('Midtrans Notification Payload: ', $request->all());
+    //     $notif = new \Midtrans\Notification();
+
+    //     try {
+    //         $transaction = $notif->transaction_status;
+    //         $orderId = $notif->order_id;
+    //         $fraud = $notif->fraud_status;
+
+    //         $invoice = Invoice::where('order_id', $orderId)->first();
+
+    //         if ($transaction == 'capture') {
+    //             if ($fraud == 'challenge') {
+    //                 $invoice->update(['status' => 'challenged']);
+    //             } else if ($fraud == 'accept') {
+    //                 $invoice->update(['status' => 'paid']);
+    //             }
+    //         } elseif ($transaction == 'settlement') {
+    //             $invoice->update(['status' => 'paid']);
+    //         } elseif ($transaction == 'cancel' || $transaction == 'deny' || $transaction == 'expire') {
+    //             $invoice->update(['status' => 'failed']);
+    //         } elseif ($transaction == 'pending') {
+    //             $invoice->update(['status' => 'pending']);
+    //         }
+
+    //         return response()->json(['message' => 'Payment updated successfully']);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['message' => 'Payment update failed', 'error' => $e->getMessage()]);
+    //     }
+    // }
     public function showInvoice($invoice_number)
     {
         $invoice = Invoice::where('invoice_number', $invoice_number)->firstOrFail();

@@ -21,3 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/cek-tagihan', [InvoiceController::class, 'cekTagihan']);
 Route::post('/process-payment', [InvoiceController::class, 'processPayment']);
 Route::post('/midtrans-notification', [InvoiceController::class, 'midtransNotification']);
+Route::get('/check-midtrans-config', [InvoiceController::class, 'checkMidtransConfig']);

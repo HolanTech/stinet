@@ -181,4 +181,18 @@ class InvoiceController extends Controller
         $invoice = Invoice::where('invoice_number', $invoice_number)->firstOrFail();
         return view('invoices.print', compact('invoice'))->render();
     }
+    public function checkMidtransConfig()
+    {
+        try {
+            \Midtrans\Config::$serverKey = config('services.midtrans.server_key');
+            \Midtrans\Config::$isProduction = config('services.midtrans.is_production');
+            \Midtrans\Config::$isSanitized = true;
+            \Midtrans\Config::$is3ds = true;
+
+            $status = \Midtrans\Transaction::status('test-order-id');
+            return response()->json(['message' => 'Midtrans configuration is correct', 'status' => $status]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Midtrans configuration failed', 'error' => $e->getMessage()], 500);
+        }
+    }
 }

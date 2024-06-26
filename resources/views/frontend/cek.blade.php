@@ -163,7 +163,7 @@
                                                         function() {
                                                             fetch(
                                                                     `/invoice/html/${invoiceNumber.textContent}`
-                                                                    )
+                                                                )
                                                                 .then(
                                                                     response =>
                                                                     response

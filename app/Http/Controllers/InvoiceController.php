@@ -142,6 +142,7 @@ class InvoiceController extends Controller
 
     public function midtransNotification(Request $request)
     {
+        Log::info('Midtrans Notification Payload: ', $request->all());
         $notif = new \Midtrans\Notification();
 
         try {

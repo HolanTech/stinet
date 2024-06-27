@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class PaketController extends Controller
 {
+    public function api()
+    {
+        $pakets = Paket::all();
+        return response()->json($pakets);
+    }
+
     public function index()
     {
         $pakets = Paket::all();

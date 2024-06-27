@@ -144,7 +144,6 @@ class InvoiceController extends Controller
     {
         Log::info('Midtrans Notification Payload: ', $request->all());
 
-        // Validasi payload
         $request->validate([
             'transaction_time' => 'required|string',
             'transaction_status' => 'required|string',
@@ -152,7 +151,6 @@ class InvoiceController extends Controller
             'status_message' => 'required|string',
             'status_code' => 'required|string',
             'signature_key' => 'required|string',
-            'settlement_time' => 'required|string',
             'payment_type' => 'required|string',
             'order_id' => 'required|string',
             'merchant_id' => 'required|string',
@@ -172,43 +170,30 @@ class InvoiceController extends Controller
 
             if (!$invoice) {
                 Log::warning('Invoice not found for order ID: ' . $orderId);
-
-                // Tambahkan log untuk mengetahui semua invoice yang ada
-                $allInvoices = Invoice::all()->pluck('order_id');
-                Log::info('All Invoices Order IDs: ', $allInvoices->toArray());
-
                 return response()->json(['message' => 'Invoice not found'], 404);
             }
 
             Log::info('Transaction status: ' . $transaction . ', Fraud status: ' . $fraud);
 
             // Update status invoice
-            $statusUpdated = false;
             if ($transaction == 'capture') {
                 if ($fraud == 'challenge') {
                     $invoice->status = 'challenged';
-                    $statusUpdated = true;
                 } else if ($fraud == 'accept') {
                     $invoice->status = 'paid';
-                    $statusUpdated = true;
                 }
             } elseif ($transaction == 'settlement') {
                 $invoice->status = 'paid';
-                $statusUpdated = true;
             } elseif ($transaction == 'cancel' || $transaction == 'deny' || $transaction == 'expire') {
                 $invoice->status = 'failed';
-                $statusUpdated = true;
             } elseif ($transaction == 'pending') {
                 $invoice->status = 'pending';
-                $statusUpdated = true;
+            } else {
+                Log::warning('Unhandled transaction status: ' . $transaction);
             }
 
-            if ($statusUpdated) {
-                $invoice->save();
-                Log::info('Invoice status updated to ' . $invoice->status . ' for order ID: ' . $orderId);
-            } else {
-                Log::warning('No status update performed for order ID: ' . $orderId);
-            }
+            $invoice->save();
+            Log::info('Invoice status updated to ' . $invoice->status . ' for order ID: ' . $orderId);
 
             return response()->json(['message' => 'Payment updated successfully']);
         } catch (\Exception $e) {
@@ -216,6 +201,7 @@ class InvoiceController extends Controller
             return response()->json(['message' => 'Payment update failed', 'error' => $e->getMessage()], 500);
         }
     }
+
 
     public function showInvoice($invoice_number)
     {

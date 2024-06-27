@@ -143,7 +143,6 @@ class InvoiceController extends Controller
     {
         Log::info('Midtrans Notification Payload: ', $request->all());
 
-        // Validasi payload
         $request->validate([
             'transaction_time' => 'required|string',
             'transaction_status' => 'required|string',
@@ -166,17 +165,10 @@ class InvoiceController extends Controller
 
         try {
             Log::info('Processing order ID: ' . $orderId);
-
-            // Cek apakah order_id ada di database
             $invoice = Invoice::where('order_id', $orderId)->first();
 
             if (!$invoice) {
                 Log::warning('Invoice not found for order ID: ' . $orderId);
-
-                // Tambahkan log untuk mengetahui semua invoice yang ada
-                $allInvoices = Invoice::all()->pluck('order_id');
-                Log::info('All Invoices Order IDs: ', $allInvoices->toArray());
-
                 return response()->json(['message' => 'Invoice not found'], 404);
             }
 
@@ -202,7 +194,6 @@ class InvoiceController extends Controller
             return response()->json(['message' => 'Payment update failed', 'error' => $e->getMessage()], 500);
         }
     }
-
 
     // public function midtransNotification(Request $request)
     // {

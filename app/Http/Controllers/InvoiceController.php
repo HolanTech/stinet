@@ -81,7 +81,7 @@ class InvoiceController extends Controller
         ]);
 
         $noPelanggan = $request->input('no_pelanggan');
-        $donation = $request->input('donation', 0);
+        $donation = $request->input('donation', 0); // Default to 0 if no donation provided
         $invoice = Invoice::where('no_pelanggan', $noPelanggan)->first();
 
         if (!$invoice) {
@@ -140,6 +140,8 @@ class InvoiceController extends Controller
         }
     }
 
+
+
     public function midtransNotification(Request $request)
     {
         Log::info('Midtrans Notification Payload: ', $request->all());
@@ -176,24 +178,35 @@ class InvoiceController extends Controller
             Log::info('Transaction status: ' . $transaction . ', Fraud status: ' . $fraud);
 
             // Update status invoice
+            $statusUpdated = false;
             if ($transaction == 'capture') {
                 if ($fraud == 'challenge') {
                     $invoice->status = 'challenged';
+                    $statusUpdated = true;
                 } else if ($fraud == 'accept') {
                     $invoice->status = 'paid';
+                    $statusUpdated = true;
                 }
             } elseif ($transaction == 'settlement') {
                 $invoice->status = 'paid';
+                $statusUpdated = true;
             } elseif ($transaction == 'cancel' || $transaction == 'deny' || $transaction == 'expire') {
                 $invoice->status = 'failed';
+                $statusUpdated = true;
             } elseif ($transaction == 'pending') {
                 $invoice->status = 'pending';
-            } else {
-                Log::warning('Unhandled transaction status: ' . $transaction);
+                $statusUpdated = true;
             }
 
-            $invoice->save();
-            Log::info('Invoice status updated to ' . $invoice->status . ' for order ID: ' . $orderId);
+            if ($statusUpdated) {
+                // Add donation amount if provided
+                $donation = $request->input('donation', 0);
+                $invoice->donation_amount = $donation;
+                $invoice->save();
+                Log::info('Invoice status updated to ' . $invoice->status . ' with donation ' . $donation . ' for order ID: ' . $orderId);
+            } else {
+                Log::warning('No status update performed for order ID: ' . $orderId);
+            }
 
             return response()->json(['message' => 'Payment updated successfully']);
         } catch (\Exception $e) {

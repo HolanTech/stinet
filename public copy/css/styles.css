@@ -1,0 +1,305 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+header {
+    background-color: #0451e1;
+    transition: background-color 0.3s ease;
+}
+
+.navbar {
+    background-color: #0451e1;
+    transition: background-color 0.3s ease;
+}
+
+.nav-link {
+    color: #ffffff; /* Warna putih terang */
+    font-size: 1.2em; /* Menambahkan ukuran font sedikit */
+}
+
+.nav-link.active,
+.nav-link:hover {
+    color: #ffd700; /* Mengubah warna teks ketika di-hover */
+    text-shadow: 0 0 5px rgb(255, 255, 255); /* Menambahkan bayangan teks untuk meningkatkan keterbacaan */
+}
+
+.banner {
+    position: relative;
+    height: 100vh;
+    background: url("../assets/banner.jpg") no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.banner-text {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    text-shadow: 2px 2px 5px black;
+}
+
+.banner-text h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+.banner-text p {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.btn-banner {
+    width: 200px;
+    font-size: 1.2em;
+    margin: 0 10px;
+}
+
+.btn-primary.btn-banner {
+    background-color: #0451e1;
+    border-color: #0451e1;
+    box-shadow: 0 0 10px #ffd700;
+}
+
+.btn-gold.btn-banner {
+    background-color: #ffd700;
+    color: #0451e1;
+    box-shadow: 0 0 10px #0451e1;
+}
+
+.service-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.service-carousel {
+    display: flex;
+    overflow: hidden;
+    width: 800px;
+    transition: transform 0.3s ease;
+}
+
+.service-item {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin: 10px;
+    width: 300px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.service-item img {
+    width: 100%;
+    height: auto;
+}
+
+.paket-image {
+    height: 150px; /* Atur tinggi sesuai kebutuhan Anda */
+    object-fit: cover; /* Mengatur gambar agar sesuai dengan kotak tanpa mengubah rasio aspek */
+    width: 100%; /* Atur lebar gambar agar mengisi lebar kontainer */
+    display: block;
+    margin: 0 auto; /* Mengatur gambar agar berada di tengah */
+}
+
+.package-list {
+    display: flex;
+    overflow-x: auto;
+}
+
+.package-item {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin: 10px;
+    min-width: 300px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.package-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.payment-box {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.result-box {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.result-box img {
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+.testimonial-item {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+footer .fa {
+    margin-right: 10px;
+}
+
+/* Tambahkan gaya yang sesuai seperti dalam instruksi sebelumnya */
+.footer {
+    position: relative;
+    background-color: #0451e1;
+    color: #ffffff;
+    text-shadow: 1px 1px 2px #000000;
+}
+
+.footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("../img/footer.png") no-repeat center center;
+    background-size: cover; /* Agar gambar memenuhi container */
+    background-attachment: fixed; /* Agar gambar tetap pada tempatnya saat di-scroll */
+    opacity: 0.5;
+    z-index: 0;
+}
+
+.footer-content {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+}
+
+/* Tambahkan gaya yang lainnya sesuai kebutuhan */
+
+footer h5 {
+    color: #ffffff;
+    text-shadow: #000000;
+}
+
+footer p,
+footer a table {
+    color: #ffffff;
+    text-shadow: #000000;
+}
+
+.btn-gold {
+    background-color: #ffd700;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-gold:hover {
+    background-color: #ccac00;
+}
+
+.bg-primary {
+    background-color: #0451e1 !important;
+}
+
+.text-gold {
+    color: #ffd700 !important;
+}
+
+.table-borderless td,
+.table-borderless th {
+    border: 0;
+}
+
+@media (max-width: 768px) {
+    .service-carousel {
+        width: 100%;
+    }
+
+    .package-list {
+        flex-direction: column;
+    }
+
+    .payment-box,
+    .result-box {
+        max-width: 100%;
+    }
+
+    footer .row {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Tambahkan gaya untuk modal */
+.modal-header {
+    background-color: #0451e1;
+    color: white;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: #0451e1;
+    color: white;
+}
+
+.nav-tabs .nav-link {
+    color: #0451e1;
+}
+
+/* Floating WhatsApp Button */
+.whatsapp-float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 40px;
+    right: 40px;
+    background-color: #25d366;
+    color: white;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 100;
+}
+
+.whatsapp-float .whatsapp-icon {
+    margin-top: 16px;
+}

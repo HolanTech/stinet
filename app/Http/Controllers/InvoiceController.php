@@ -73,6 +73,7 @@ class InvoiceController extends Controller
         }
     }
 
+
     public function processPayment(Request $request)
     {
         $request->validate([
@@ -99,6 +100,7 @@ class InvoiceController extends Controller
         }
 
         $invoice->order_id = $invoice->invoice_number . '-' . time();
+        $invoice->donation = $donation; // Save donation to the invoice
         $invoice->save();
 
         $totalAmount = $invoice->amount + $donation;
@@ -199,11 +201,8 @@ class InvoiceController extends Controller
             }
 
             if ($statusUpdated) {
-                // Add donation amount if provided
-                $donation = $request->input('donation', 0);
-                $invoice->donation = $donation;
                 $invoice->save();
-                Log::info('Invoice status updated to ' . $invoice->status . ' with donation ' . $donation . ' for order ID: ' . $orderId);
+                Log::info('Invoice status updated to ' . $invoice->status . ' for order ID: ' . $orderId);
             } else {
                 Log::warning('No status update performed for order ID: ' . $orderId);
             }
@@ -214,6 +213,7 @@ class InvoiceController extends Controller
             return response()->json(['message' => 'Payment update failed', 'error' => $e->getMessage()], 500);
         }
     }
+
 
 
     public function showInvoice($invoice_number)

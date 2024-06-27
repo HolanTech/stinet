@@ -182,18 +182,24 @@ class InvoiceController extends Controller
 
             Log::info('Transaction status: ' . $transaction . ', Fraud status: ' . $fraud);
 
+            // Update status invoice
             if ($transaction == 'capture') {
                 if ($fraud == 'challenge') {
                     $invoice->update(['status' => 'challenged']);
+                    Log::info('Invoice status updated to challenged for order ID: ' . $orderId);
                 } else if ($fraud == 'accept') {
                     $invoice->update(['status' => 'paid']);
+                    Log::info('Invoice status updated to paid for order ID: ' . $orderId);
                 }
             } elseif ($transaction == 'settlement') {
                 $invoice->update(['status' => 'paid']);
+                Log::info('Invoice status updated to paid for order ID: ' . $orderId);
             } elseif ($transaction == 'cancel' || $transaction == 'deny' || $transaction == 'expire') {
                 $invoice->update(['status' => 'failed']);
+                Log::info('Invoice status updated to failed for order ID: ' . $orderId);
             } elseif ($transaction == 'pending') {
                 $invoice->update(['status' => 'pending']);
+                Log::info('Invoice status updated to pending for order ID: ' . $orderId);
             }
 
             return response()->json(['message' => 'Payment updated successfully']);
@@ -202,6 +208,7 @@ class InvoiceController extends Controller
             return response()->json(['message' => 'Payment update failed', 'error' => $e->getMessage()], 500);
         }
     }
+
 
     public function showInvoice($invoice_number)
     {
